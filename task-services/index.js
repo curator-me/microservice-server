@@ -67,6 +67,8 @@ app.post("/tasks/add", async (req, res) => {
   try {
     const newTask = new Task({ title, description, userId });
     await newTask.save();
+
+    // Publish event to RabbitMQ
     if (!channel) {
       return res.status(503).json({ error: "RabbitMQ not connected" });
     }
