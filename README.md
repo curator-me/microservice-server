@@ -33,8 +33,15 @@ A microservices-based application with RabbitMQ message queueing and MongoDB + N
 ### Installation & Run
 
 ```bash
+# clone the repo
 git clone https://github.com/curator-me/microservice-server.git
 cd microservice-server
+
+# Add mongodb cloud connection
+echo "MONGO_URI=" > task-services/.env
+echo "MONGO_URI=" > user-services/.env
+
+# build and run the container
 docker compose up -d
 ```
 
@@ -54,12 +61,17 @@ docker compose up -d
 ### Task Service
 - **Create Task**
   ```
-  POST http://localhost:3000/tasks/add
+  POST http://localhost:3002/tasks/add
   ```
 
 - **Get All Tasks**
   ```
-  GET http://localhost:3000/tasks
+  GET http://localhost:3002/tasks
+  ```
+### RabbitMQ overview             
+  ```
+  # user: guest, pass: guest
+  http://localhost:15672/
   ```
 
 ## Commands
