@@ -6,10 +6,6 @@ const router = express();
 
 
 // Routes
-router.get("/", (req, res) => {
-  res.send("User Services is running!");
-});
-
 router.get("/users", async (req, res) => {
   const users = await User.find();
   res.status(200).json(users);

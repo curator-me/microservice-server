@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const body_parser = require("body-parser");
 const cors = require("cors");
 const connectDB = require("./database/db");
@@ -27,7 +26,7 @@ app.use("/", userRoutes);
 
 // Health check
 app.get("/", (req, res) => {
-  res.status(200).json({ status: "OK", service: "User Service" });
+  res.status(200).json({ status: "OK", info: "User Services is running!" });
 });
 
 
@@ -35,6 +34,7 @@ app.listen(port, () => {
   console.log(`User service app listening on port ${port}`);
 });
 
+// Exporting for tests/user-services.test.js
 module.exports = app;
 
 // // 404 handler
