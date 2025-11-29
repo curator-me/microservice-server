@@ -3,7 +3,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
-const app = require("../controllers/users"); 
+const app = require("../index");
 const User = require("../models/User");
 
 let mongoServer;
@@ -32,8 +32,10 @@ beforeEach(async () => {
 // TEST: GET /
 test("GET / should return service running message", async () => {
   const res = await request(app).get("/");
+
   expect(res.statusCode).toBe(200);
-  expect(res.text).toBe("User Services is running!");
+  expect(res.body.status).toBe("OK");
+  expect(res.body.info).toBe("User Services is running!");
 });
 
 // TEST: GET /users (empty)

@@ -1,36 +1,16 @@
+// controllers/user.js
 const express = require("express");
-const mongoose = require("mongoose");
-const body_parser = require("body-parser");
-const cors = require("cors");
-const connectDB = require("../database/db");
 const User = require("../models/User");
 
-const app = express();
-
-app.use(body_parser.json());
-
-app.use(
-  cors({
-    origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
-  })
-);
-
-// Connect to database only when NOT testing
-if (process.env.NODE_ENV !== "test") {
-  connectDB();
-}
+const router = express();
 
 // Routes
-app.get("/", (req, res) => {
-  res.send("User Services is running!");
-});
-
-app.get("/users", async (req, res) => {
+router.get("/users", async (req, res) => {
   const users = await User.find();
   res.status(200).json(users);
 });
 
-app.get("/users/:id", async (req, res) => {
+router.get("/users/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
 
@@ -45,8 +25,7 @@ app.get("/users/:id", async (req, res) => {
   }
 });
 
-
-app.post("/users", async (req, res) => {
+router.post("/users", async (req, res) => {
   const { name, email } = req.body;
 
   try {
@@ -59,4 +38,4 @@ app.post("/users", async (req, res) => {
   }
 });
 
-module.exports = app;
+module.exports = router;
