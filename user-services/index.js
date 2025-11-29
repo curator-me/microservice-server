@@ -29,9 +29,11 @@ app.get("/", (req, res) => {
   res.status(200).json({ status: "OK", info: "User Services is running!" });
 });
 
-app.listen(port, () => {
-  console.log(`User service app listening on port ${port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`User service app listening on port ${port}`);
+  });
+}
 
 // Exporting for tests/user-services.test.js
 module.exports = app;
