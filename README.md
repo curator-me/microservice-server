@@ -54,12 +54,12 @@ docker compose up -d
 ### Task Service
 - **Create Task**
   ```
-  POST http://localhost:3000/tasks/add
+  POST http://localhost:3002/tasks/add
   ```
 
 - **Get All Tasks**
   ```
-  GET http://localhost:3000/tasks
+  GET http://localhost:3002/tasks
   ```
 
 ## Commands
