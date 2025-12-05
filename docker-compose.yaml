@@ -1,0 +1,72 @@
+# docker yml to run docker
+services:
+  jenkins:
+    build: ./Jenkins
+    image: myjenkins-blueocean:2.528.2-1
+    container_name: jenkins-blueocean
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes: 
+      - jenkins-data:/var/jenkins_home
+      # - jenkins-docker-certs:/certs/client:ro
+      - /var/run/docker.sock:/var/run/docker.sock  # Allows Jenkins to use host Docker
+
+    networks:
+      - jenkins
+    depends_on:
+      - rabbitmq
+    # user: docker
+
+    # If you want Jenkins to have Docker-in-Docker capability
+    # privileged: true
+    # user: roo
+
+    # This part is To let Jenkins use Docker as a Cloud Agent provider
+  dockerhost:
+    image: alpine/socat:1.8.0.0
+    container_name: docker-socat
+    command: tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - jenkins
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    ports:
+      - "5679:5672"
+      - "15672:15672"
+    networks:
+      - jenkins
+
+
+networks:
+  jenkins:
+    driver: bridge
+
+volumes:
+  jenkins-data:
+  jenkins-docker-certs:
+  rabbitmq:
+
+
+
+# build step
+# docker build -t myjenkins-blueocean:2.528.2-1 .
+# docker-compose up -d
+# user admin
+# pass 3045
+# docker inspect docker-socket # copy the ip address
+
+
+
+# two main ways to run builds: 
+# > directly on the Jenkins master/agent 
+# > via cloud/remote agents.
+
+
+# dockerhost in docker-compose exposes the Docker socket 
+# over TCP, so Jenkins can use it as a cloud provider.

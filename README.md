@@ -1,7 +1,9 @@
-# Microservice Server
+# Microservice Server(CI/CD with jenkins)
 
-A microservices-based application with RabbitMQ message queueing and MongoDB + Node.js.
+A lightweight microservices-based system built with Node.js, Express, MongoDB, and RabbitMQ, fully containerized with Docker.
+The project includes an automated CI/CD pipeline powered by Jenkins, also running inside Docker, which builds, tests, and deploys all microservices using Docker images.
 
+This setup demonstrates a real-world microservice architecture with event-driven communication, centralized pipeline automation, and seamless containerized deployment.
 
 ## Services
 
@@ -30,13 +32,91 @@ A microservices-based application with RabbitMQ message queueing and MongoDB + N
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
-### Installation & Run
+## Build
 
+### Build the docker
 ```bash
 git clone https://github.com/curator-me/microservice-server.git
 cd microservice-server
 docker compose up -d
 ```
+---
+
+### Build & Run
+
+There are **two** parts to building this project:
+
+1. **Running the Microservices (Docker Compose)**
+2. **Running Jenkins CI/CD (also in Docker)**
+
+---
+
+## 1 Build & Run Microservices
+
+These commands run all services: User, Task, Notification, RabbitMQ.
+
+```bash
+git clone https://github.com/curator-me/microservice-server.git
+cd microservice-server
+
+# Start all microservices
+docker compose up -d
+```
+
+Check containers:
+
+```bash
+docker compose ps
+```
+
+Rebuild after changes:
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+## 2 Build & Run Jenkins (CI/CD Pipeline)
+
+This project includes a Jenkins setup that is fully Dockerized.
+
+### Start Jenkins
+
+From inside the project directory:
+
+```bash
+docker compose -f jenkins-compose.yml up -d
+```
+
+Jenkins will be available at:
+
+```
+http://localhost:8080
+```
+
+---
+
+### Configure Pipeline
+
+Jenkins automatically fetches your `Jenkinsfile` from the GitHub repo.
+
+Steps:
+
+1. Open Jenkins → **New Item**
+2. Select **Pipeline**
+3. Choose **Pipeline from SCM**
+4. Enter the repo URL
+   `https://github.com/curator-me/microservice-server.git`
+5. Save → **Build Now**
+
+The pipeline will:
+
+* Checkout code
+* Install Node dependencies
+* Run tests
+* Run services 
+
 
 ## API Endpoints
 

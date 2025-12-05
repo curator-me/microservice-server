@@ -6,30 +6,16 @@ pipeline {
     }
 
     environment {
-        USER_SERVICE_DIR = "user-services"
-        TASK_SERVICE_DIR = "task-services"
-        NOTIF_SERVICE_DIR = "notification-services"
+        USER_SERVICE_DIR = "src/user-services"
+        TASK_SERVICE_DIR = "src/task-services"
+        NOTIF_SERVICE_DIR = "src/notification-services"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'jenkin-setup',
+                git branch: 'jenkins-setup',
                     url: 'https://github.com/curator-me/microservice-server.git'
-            }
-        }
-        
-        stage('Verify Node.js') {
-            steps {
-                sh '''
-                    echo "Node.js version:"
-                    node --version
-                    echo "NPM version:"
-                    npm --version
-                    echo "Node.js installation path:"
-                    which node
-                    which npm
-                '''
             }
         }
 
@@ -61,14 +47,14 @@ pipeline {
 
         stage('Start Services') {
             steps {
-                dir(NOTIF_SERVICE_DIR) {
-                    sh 'nohup npm start &'
-                }
                 dir(USER_SERVICE_DIR) {
-                    sh 'nohup npm start &'
+                    sh 'npm start &'
                 }
                 dir(TASK_SERVICE_DIR) {
-                    sh 'nohup npm start &'
+                    sh 'npm start &'
+                }
+                dir(NOTIF_SERVICE_DIR) {
+                    sh 'npm start &'
                 }
             }
         }
